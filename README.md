@@ -1,6 +1,6 @@
 # rossec
 
-**WARNING: This library is EXPERIMENTAL. DO NOT use it on applications that MUST HAVE any kind of security. Authors do not guarantee that it works as it should do.**
+**WARNING: This library is EXPERIMENTAL. DO NOT use it on applications that MUST HAVE any kind of security. Authors do not guarantee that it works as it should.**
 
 This is the official repository of rossec.
 
