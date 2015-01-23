@@ -1,6 +1,6 @@
 # rossec
 
-**WARNING: This library is EXPERIMENTAL. DO NOT use it on production or applications that should have any kind of security. Authors do not guarantee that it works as it should. Also, this library alone DOES NOT provide security to ROS messages exchanges.**
+**WARNING: This library is EXPERIMENTAL. DO NOT use it on production. Do not use unless you know what you are doing. Also, this library alone DOES NOT provide security to ROS messages exchanges.**
 
 This is the official repository of rossec.
 
