@@ -4,8 +4,8 @@
   <version>0.2.0</version>
   <description>The rossec is a library developed to provide cryptography on messages exchanges using ROS</description>
 
-  <maintainer email="feliperalmeida">felipe</maintainer>
-  <maintainer email="longaraymatheus">matheus</maintainer>
+  <maintainer email="feliperalmeida@gmail.com">Felipe Almeida</maintainer>
+  <maintainer email="longaray.matheus@gmail.com">Matheus Longaray</maintainer>
 
   <license>GPLv2</license>
 
