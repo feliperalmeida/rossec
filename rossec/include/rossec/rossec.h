@@ -24,54 +24,56 @@ using std::string;
 namespace rossec
 {
 
-class AESGCM {
+class AESGCM
+{
 public:
-    AESGCM(byte newkey[]);
+    AESGCM(byte new_key[]);
     ~AESGCM(void);
     string encryptString(string msg);
     string decryptString(string msg);
-    bool setKey (byte newkey[], int newsize=CryptoPP::AES::DEFAULT_KEYLENGTH);
+    bool setKey (byte new_key[], int new_size=CryptoPP::AES::DEFAULT_KEYLENGTH);
     string getKeyHexString();
-    string getIvHexString();
+    string getIVHexString();
     string getHexString(string msg);
 
     const static int DEFAULT_KEYLENGTH = CryptoPP::AES::DEFAULT_KEYLENGTH;
 
 private:
-    int key_size;
-    int iv_size;
-    byte *iv;
-    CryptoPP::AutoSeededRandomPool *prng;
-    byte *key;
+    int key_size_;
+    int iv_size_;
+    byte *iv_;
+    CryptoPP::AutoSeededRandomPool *prng_;
+    byte *key_;
     const static int TAG_SIZE = 12;
 
-    CryptoPP::GCM< CryptoPP::AES >::Encryption e;
-    CryptoPP::GCM< CryptoPP::AES >::Decryption d;
+    CryptoPP::GCM<CryptoPP::AES>::Encryption e_;
+    CryptoPP::GCM<CryptoPP::AES>::Decryption d_;
 
 };
 
-class AESCBC {
+class AESCBC
+{
 public:
-    AESCBC(byte newkey[]);
+    AESCBC(byte new_key[]);
     ~AESCBC(void);
     string encryptString(string msg);
     string decryptString(string msg);
-    bool setKey (byte newkey[], int newsize=CryptoPP::AES::DEFAULT_KEYLENGTH);
+    bool setKey (byte new_key[], int new_size=CryptoPP::AES::DEFAULT_KEYLENGTH);
     string getKeyHexString();
-    string getIvHexString();
+    string getIVHexString();
     string getHexString(string msg);
 
     const static int DEFAULT_KEYLENGTH = CryptoPP::AES::DEFAULT_KEYLENGTH;
 
 private:
-    int key_size;
-    int iv_size;
-    byte *iv;
-    CryptoPP::AutoSeededRandomPool *prng;
-    byte *key;
+    int key_size_;
+    int iv_size_;
+    byte *iv_;
+    CryptoPP::AutoSeededRandomPool *prng_;
+    byte *key_;
 
-    CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption e;
-    CryptoPP::CBC_Mode< CryptoPP::AES >::Decryption d;
+    CryptoPP::CBC_Mode<CryptoPP::AES>::Encryption e_;
+    CryptoPP::CBC_Mode<CryptoPP::AES>::Decryption d_;
 
 };
 

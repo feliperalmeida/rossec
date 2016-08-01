@@ -7,87 +7,93 @@ using std::cerr;
 using CryptoPP::StringSource;
 using CryptoPP::StringSink;
 
-rossec::AESGCM::AESGCM(byte *newkey) {
+rossec::AESGCM::AESGCM(byte *new_key)
+{
     // Constructor
-    this->key_size = CryptoPP::AES::DEFAULT_KEYLENGTH;
-    this->iv_size = CryptoPP::AES::BLOCKSIZE;
-    this->prng = new CryptoPP::AutoSeededRandomPool();
+    key_size_ = CryptoPP::AES::DEFAULT_KEYLENGTH;
+    iv_size_ = CryptoPP::AES::BLOCKSIZE;
+    prng_ = new CryptoPP::AutoSeededRandomPool();
 
-    iv = (byte*) malloc(iv_size * sizeof(byte));
-    prng->GenerateBlock(iv, iv_size );
+    iv_ = (byte*) malloc(iv_size_ * sizeof(byte));
+    prng_->GenerateBlock(iv_, iv_size_);
 
-    key = (byte*) malloc(key_size * sizeof(byte));
-    this->setKey(newkey);
+    key_ = (byte*) malloc(key_size_ * sizeof(byte));
+    this->setKey(new_key);
 }
 
-rossec::AESGCM::~AESGCM(void) {
-    memset(key, '0', key_size);
-    free(prng);
+rossec::AESGCM::~AESGCM(void)
+{
+    memset(key_, '0', key_size_);
+    free(prng_);
     // Destructor
 }
 
-bool rossec::AESGCM::setKey (byte newkey[], int newsize) {
-    if (key_size != newsize) {
-        if ((key = (byte*) malloc(newsize * sizeof(byte)) ) == NULL)
+bool rossec::AESGCM::setKey(byte new_key[], int new_size)
+{
+    if (key_size_ != new_size)
+    {
+        if ((key_ = (byte*) malloc(new_size * sizeof(byte))) == NULL)
             return false;
-        key_size = newsize;
+        key_size_ = new_size;
     }
-    memcpy(key, newkey, key_size);
-    e.SetKeyWithIV( key, key_size, iv, iv_size );
+    memcpy(key_, new_key, key_size_);
+    e_.SetKeyWithIV(key_, key_size_, iv_, iv_size_);
     return true;
 }
 
-string rossec::AESGCM::getKeyHexString() {
+string rossec::AESGCM::getKeyHexString()
+{
     string encoded;
-    StringSource( key, key_size, true,
+    StringSource(key_, key_size_, true,
         new CryptoPP::HexEncoder(
-            new CryptoPP::StringSink( encoded )
+            new CryptoPP::StringSink(encoded)
         ) // HexEncoder
     ); // StringSource
     return encoded;
 }
 
-string rossec::AESGCM::getIvHexString() {
+string rossec::AESGCM::getIVHexString()
+{
     string encoded;
-    StringSource( iv, iv_size, true,
+    StringSource(iv_, iv_size_, true,
         new CryptoPP::HexEncoder(
-            new CryptoPP::StringSink( encoded )
+            new CryptoPP::StringSink(encoded)
         ) // HexEncoder
     ); // StringSource
     return encoded;
 }
 
-string rossec::AESGCM::getHexString(string msg) {
+string rossec::AESGCM::getHexString(string msg)
+{
     string encoded;
-    StringSource( msg, true,
+    StringSource(msg, true,
         new CryptoPP::HexEncoder(
-            new StringSink( encoded )
+            new StringSink(encoded)
         ) // HexEncoder
     ); // StringSource
     return encoded;
 }
 
-string rossec::AESGCM::encryptString(string msg) {
+string rossec::AESGCM::encryptString(string msg)
+{
     string cipher;
     string final;
 
     try
     {
-//        CryptoPP::GCM< CryptoPP::AES >::Encryption e;
-        e.SetKeyWithIV( key, key_size, iv, iv_size );
-        // e.SpecifyDataLengths( 0, pdata.size(), 0 );
+        e_.SetKeyWithIV(key_, key_size_, iv_, iv_size_);
 
-        StringSource( msg, true,
-            new CryptoPP::AuthenticatedEncryptionFilter( e,
-                new StringSink( cipher ), false, TAG_SIZE
+        StringSource(msg, true,
+            new CryptoPP::AuthenticatedEncryptionFilter(e_,
+                new StringSink(cipher), false, TAG_SIZE
             ) // AuthenticatedEncryptionFilter
         ); // StringSource
 
-    std::string s_iv(reinterpret_cast<char const*>(iv), iv_size);
+    std::string s_iv(reinterpret_cast<char const*>(iv_), iv_size_);
     final = s_iv + cipher;
 
-    e.GetNextIV(*prng, iv);
-    e.Resynchronize(iv);
+    e_.GetNextIV(*prng_, iv_);
+    e_.Resynchronize(iv_);
 
     return final;
 
@@ -108,33 +114,30 @@ string rossec::AESGCM::encryptString(string msg) {
     return "Error.";
 }
 
-string rossec::AESGCM::decryptString(string msg) {
+string rossec::AESGCM::decryptString(string msg)
+{
 
-    int ciphertextLength = msg.size() - iv_size;
+    int ciphertext_length = msg.size() - iv_size_;
 
     string cipher, s_iv;
-    string rpdata;
-    //string encoded;
+    string recovered_plaintext;
 
-    s_iv.resize(iv_size);
-    cipher.resize(ciphertextLength);
+    s_iv.resize(iv_size_);
+    cipher.resize(ciphertext_length);
 
-    for(int i = 0; i < iv_size; i++)
+    for(int i = 0; i < iv_size_; i++)
         s_iv[i] = msg[i];
 
-    for(int i = 0; i < ciphertextLength; i++)
-        cipher[i] = msg[i + iv_size];
+    for(int i = 0; i < ciphertext_length; i++)
+        cipher[i] = msg[i + iv_size_];
 
     try
     {
-        //GCM< AES >::Decryption d;
-        d.SetKeyWithIV( key, key_size, (const byte*) s_iv.c_str(), iv_size);
-        // d.SpecifyDataLengths( 0, cipher.size()-TAG_SIZE, 0 );
+        d_.SetKeyWithIV(key_, key_size_, (const byte*) s_iv.c_str(), iv_size_);
 
-        CryptoPP::AuthenticatedDecryptionFilter df( d,
-            new StringSink( rpdata ),
-                CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_FLAGS,
-                    TAG_SIZE
+        CryptoPP::AuthenticatedDecryptionFilter df(d_,
+            new StringSink(recovered_plaintext),
+                CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_FLAGS, TAG_SIZE
         ); // AuthenticatedDecryptionFilter
 
         // The StringSource dtor will be called immediately
@@ -144,8 +147,8 @@ string rossec::AESGCM::decryptString(string msg) {
         //  the DecryptionFilter, we must use a redirector
         //  or manually Put(...) into the filter without
         //  using a StringSource.
-        StringSource( cipher, true,
-            new CryptoPP::Redirector( df )
+        StringSource(cipher, true,
+            new CryptoPP::Redirector(df)
         ); // StringSource
 
         // If the object does not throw, here's the only
@@ -153,7 +156,7 @@ string rossec::AESGCM::decryptString(string msg) {
         bool b = df.GetLastResult();
         assert( true == b );
 
-       return rpdata;
+       return recovered_plaintext;
 
     }
     catch( CryptoPP::HashVerificationFilter::HashVerificationFailed& e )
