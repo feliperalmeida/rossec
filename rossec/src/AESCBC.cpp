@@ -1,11 +1,11 @@
 #include "rossec/rossec.h"
 
-using std::cout;
 using std::endl;
 using std::cerr;
 
 using CryptoPP::StringSource;
 using CryptoPP::StringSink;
+using CryptoPP::HexEncoder;
 
 rossec::AESCBC::AESCBC(byte *new_key)
 {
@@ -28,7 +28,7 @@ rossec::AESCBC::~AESCBC(void)
     // Destructor
 }
 
-bool rossec::AESCBC::setKey (byte new_key[], int new_size)
+bool rossec::AESCBC::setKey(byte new_key[], int new_size)
 {
     if (key_size_ != new_size)
     {
@@ -45,8 +45,8 @@ string rossec::AESCBC::getKeyHexString()
 {
     string encoded;
     StringSource(key_, key_size_, true,
-        new CryptoPP::HexEncoder(
-            new CryptoPP::StringSink(encoded)
+        new HexEncoder(
+            new StringSink(encoded)
         ) // HexEncoder
     ); // StringSource
     return encoded;
@@ -56,8 +56,8 @@ string rossec::AESCBC::getIVHexString()
 {
     string encoded;
     StringSource(iv_, iv_size_, true,
-        new CryptoPP::HexEncoder(
-            new CryptoPP::StringSink(encoded)
+        new HexEncoder(
+            new StringSink(encoded)
         ) // HexEncoder
     ); // StringSource
     return encoded;
@@ -67,7 +67,7 @@ string rossec::AESCBC::getHexString(string msg)
 {
     string encoded;
     StringSource(msg, true,
-        new CryptoPP::HexEncoder(
+        new HexEncoder(
             new StringSink(encoded)
         ) // HexEncoder
     ); // StringSource
@@ -111,7 +111,6 @@ string rossec::AESCBC::encryptString(string msg)
 
 string rossec::AESCBC::decryptString(string msg)
 {
-
     int ciphertext_length = msg.size() - iv_size_;
 
     string cipher, s_iv;

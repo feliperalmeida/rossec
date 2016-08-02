@@ -1,11 +1,11 @@
 #include "rossec/rossec.h"
 
-using std::cout;
 using std::endl;
 using std::cerr;
 
 using CryptoPP::StringSource;
 using CryptoPP::StringSink;
+using CryptoPP::HexEncoder;
 
 rossec::AESGCM::AESGCM(byte *new_key)
 {
@@ -45,8 +45,8 @@ string rossec::AESGCM::getKeyHexString()
 {
     string encoded;
     StringSource(key_, key_size_, true,
-        new CryptoPP::HexEncoder(
-            new CryptoPP::StringSink(encoded)
+        new HexEncoder(
+            new StringSink(encoded)
         ) // HexEncoder
     ); // StringSource
     return encoded;
@@ -56,8 +56,8 @@ string rossec::AESGCM::getIVHexString()
 {
     string encoded;
     StringSource(iv_, iv_size_, true,
-        new CryptoPP::HexEncoder(
-            new CryptoPP::StringSink(encoded)
+        new HexEncoder(
+            new StringSink(encoded)
         ) // HexEncoder
     ); // StringSource
     return encoded;
@@ -67,7 +67,7 @@ string rossec::AESGCM::getHexString(string msg)
 {
     string encoded;
     StringSource(msg, true,
-        new CryptoPP::HexEncoder(
+        new HexEncoder(
             new StringSink(encoded)
         ) // HexEncoder
     ); // StringSource
@@ -116,7 +116,6 @@ string rossec::AESGCM::encryptString(string msg)
 
 string rossec::AESGCM::decryptString(string msg)
 {
-
     int ciphertext_length = msg.size() - iv_size_;
 
     string cipher, s_iv;

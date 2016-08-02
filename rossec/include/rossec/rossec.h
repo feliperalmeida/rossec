@@ -1,13 +1,9 @@
 #ifndef ROSSEC
 #define ROSSEC
 
-#include "ros/ros.h"
-#include "std_msgs/String.h"
-
-#include <sstream>
 #include <iostream>
-
 #include <string>
+using std::string;
 
 #include "cryptopp/hex.h"
 #include "cryptopp/osrng.h"
@@ -16,10 +12,6 @@
 #include "cryptopp/aes.h"
 #include "cryptopp/gcm.h"
 #include "cryptopp/ccm.h"
-#include "assert.h"
-
-using std::string;
-
 
 namespace rossec
 {
