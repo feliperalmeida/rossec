@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+  <name>rossec_tests</name>
+  <version>0.1.0</version>
+  <description>rossec_tests is a package developed to provide usage examples of rossec library when exchanging messages
+    on ROS</description>
+
+  <maintainer email="feliperalmeida@gmail.com">Felipe Almeida</maintainer>
+  <maintainer email="longaray.matheus@gmail.com">Matheus Longaray</maintainer>
+
+  <license>GPLv2</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>rossec</build_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>rossec</run_depend>
+
+  <export>
+
+  </export>
+</package>
