@@ -101,8 +101,9 @@ string rossec::AESCBC::encryptString(string msg)
     }
     catch(const CryptoPP::Exception& e)
     {
+        cerr << "Caught Exception..." << endl;
         cerr << e.what() << endl;
-        exit(1);
+        cerr << endl;
     }
 
     return "Error.";
@@ -140,8 +141,9 @@ string rossec::AESCBC::decryptString(string msg)
     }
     catch(const CryptoPP::Exception& e)
     {
+        cerr << "Caught Exception..." << endl;
         cerr << e.what() << endl;
-        exit(1);
+        cerr << endl;
     }
 
     return "Error.";
