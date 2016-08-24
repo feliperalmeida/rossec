@@ -90,14 +90,13 @@ string rossec::AESGCM::encryptString(string msg)
             ) // AuthenticatedEncryptionFilter
         ); // StringSource
 
-    std::string s_iv(reinterpret_cast<char const*>(iv_), iv_size_);
-    final = s_iv + cipher;
+        std::string s_iv(reinterpret_cast<char const*>(iv_), iv_size_);
+        final = s_iv + cipher;
 
-    e_.GetNextIV(*prng_, iv_);
-    e_.Resynchronize(iv_);
+        e_.GetNextIV(*prng_, iv_);
+        e_.Resynchronize(iv_);
 
-    return final;
-
+        return final;
     }
     catch( CryptoPP::InvalidArgument& e )
     {
