@@ -9,7 +9,6 @@ using CryptoPP::HexEncoder;
 
 rossec::AESCBC::AESCBC(byte *new_key)
 {
-    // Constructor
     key_size_ = CryptoPP::AES::DEFAULT_KEYLENGTH;
     iv_size_ = CryptoPP::AES::BLOCKSIZE;
     prng_ = new CryptoPP::AutoSeededRandomPool();
@@ -24,8 +23,10 @@ rossec::AESCBC::AESCBC(byte *new_key)
 rossec::AESCBC::~AESCBC(void)
 {
     memset(key_, '0', key_size_);
+    memset(iv_, '0', iv_size_);
+    free(key_);
+    free(iv_);
     free(prng_);
-    // Destructor
 }
 
 bool rossec::AESCBC::setKey(byte new_key[], int new_size)
